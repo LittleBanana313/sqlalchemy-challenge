@@ -49,7 +49,7 @@ def stations():
 
     station = sess.query(stat.station, stat.name).all()
     sess.close()
-    return jsonify([{ID:name} for ID, name in station])
+    return jsonify(Station = [{ID:name} for ID, name in station])
 
 # Create temp observation query and route
 minus_year = dt.date(2017,8,23) - dt.timedelta(days=365)
@@ -66,26 +66,34 @@ def tobs():
     return jsonify(temperatures = [item for t in temp_obs for item in t])
 
 # Create start query and route
-@app.route("/api/v1.0/<start>")
-def start(start):
-    sess = Session(engine)
+# @app.route("/api/v1.0/<start>")
+# def start(start):
+#     sess = Session(engine)
 
-    select = [func.min(meas.tobs), func.max(meas.tobs), func.avg(meas.tobs)]
-    min_max = sess.query(*select).\
-        filter(meas.date > start).all()
-    sess.close()
-    return jsonify(list(min_max[0]))
+#     select = [func.min(meas.tobs), func.max(meas.tobs), func.avg(meas.tobs)]
+#     min_max = sess.query(*select).\
+#         filter(meas.date > start).all()
+#     sess.close()
+#     return jsonify(temperatures = list(min_max[0]))
 
 # Create start-end query and route
+@app.route("/api/v1.0/<start>")
 @app.route("/api/v1.0/<start>/<end>")
-def start_end(start, end):
+def start_end(start, end = None):
     sess = Session(engine)
-    select = sess.query(meas.date, func.min(meas.tobs), func.avg(meas.tobs), func.max(meas.tobs)).\
-    start_end = sess.query(*select).\
-        filter(meas.date >= start).\
-            group_by(meas.date).all()
-    sess.close()
-    return jsonify(list(start_end[0]))
+    select = [func.min(meas.tobs), func.max(meas.tobs), func.avg(meas.tobs)]
+    if end:
+        min_max = sess.query(*select).\
+            filter(meas.date >= start).\
+            filter(meas.date <= end).all()
+        sess.close()
+        return jsonify(temperatures = list(np.ravel(min_max)))
+    else:
+        min_max = sess.query(*select).\
+            filter(meas.date > start).all()
+        sess.close()
+        return jsonify(temperatures = list(np.ravel(min_max)))
+
 
 @app.route("/")
 def welcome():
