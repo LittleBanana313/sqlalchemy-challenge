@@ -41,3 +41,38 @@ Important Don't forget to close out your session at the end of your notebook!
 
 
 6) Plot the results using the DataFrame plot method.
+
+**Station Analysis**
+
+
+1) Design a query to calculate the total number of stations in the dataset.
+
+
+2) Design a query to find the most active stations (i.e. which stations have the most rows?).
+
+
+3) List the stations and observation counts in descending order.
+
+
+4) Which station id has the highest number of observations?
+
+
+5) Using the most active station id, calculate the lowest, highest, and average temperature.
+
+
+Hint: You will need to use a function such as func.min, func.max, func.avg, and func.count in your queries.
+
+
+
+
+6) Design a query to retrieve the last 12 months of temperature observation data (TOBS).
+
+
+7) Filter by the station with the highest number of observations.
+
+
+8) Query the last 12 months of temperature observation data for this station.
+
+
+9) Plot the results as a histogram with bins=12.
+![Alt text](images/temp.png?raw=true "Title")
