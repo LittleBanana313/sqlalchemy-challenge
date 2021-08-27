@@ -1,6 +1,6 @@
 # sqlalchemy-challenge
 Little victories and hurdles in SQLAlchemy Homework - Surfs Up!
-![Alt text](images/surfs-up.png.png?raw=true "Title")
+![Alt text](images/surfs-up.png?raw=true "Title")
 
 **Step 1 - Climate Analysis and Exploration**
 To begin, use Python and SQLAlchemy to do basic climate analysis and data exploration of your climate database. All of the following analysis should be completed using SQLAlchemy ORM queries, Pandas, and Matplotlib.
@@ -41,6 +41,7 @@ Important Don't forget to close out your session at the end of your notebook!
 
 
 6) Plot the results using the DataFrame plot method.
+![Alt text](/images/precip.png?raw=true "Title")
 
 **Station Analysis**
 
