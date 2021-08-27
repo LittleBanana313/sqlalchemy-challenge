@@ -1,5 +1,4 @@
 import numpy as np
-
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
@@ -35,6 +34,7 @@ minus_year = dt.date(2017,8,23) - dt.timedelta(days=365)
 def precipitation():
     sess = Session(engine)
 
+    # Make the query
     precip = sess.query(meas.date, meas.prcp).\
     filter(meas.date >= minus_year).\
     order_by(meas.date).all()
@@ -47,6 +47,7 @@ def precipitation():
 def stations():
     sess = Session(engine)
 
+    # Make the query
     station = sess.query(stat.station, stat.name).all()
     sess.close()
     return jsonify(Station = [{ID:name} for ID, name in station])
@@ -57,6 +58,7 @@ minus_year = dt.date(2017,8,23) - dt.timedelta(days=365)
 def tobs():
     sess = Session(engine)
 
+    # Make the query
     temp_obs = sess.query(meas.tobs).\
     filter(meas.date >= minus_year).\
     filter(meas.station == "USC00519281").\
@@ -65,22 +67,13 @@ def tobs():
     sess.close()
     return jsonify(temperatures = [item for t in temp_obs for item in t])
 
-# Create start query and route
-# @app.route("/api/v1.0/<start>")
-# def start(start):
-#     sess = Session(engine)
-
-#     select = [func.min(meas.tobs), func.max(meas.tobs), func.avg(meas.tobs)]
-#     min_max = sess.query(*select).\
-#         filter(meas.date > start).all()
-#     sess.close()
-#     return jsonify(temperatures = list(min_max[0]))
-
-# Create start-end query and route
+# Create start/end query and route
 @app.route("/api/v1.0/<start>")
 @app.route("/api/v1.0/<start>/<end>")
 def start_end(start, end = None):
     sess = Session(engine)
+
+    # Make the query loop
     select = [func.min(meas.tobs), func.max(meas.tobs), func.avg(meas.tobs)]
     if end:
         min_max = sess.query(*select).\
@@ -94,7 +87,7 @@ def start_end(start, end = None):
         sess.close()
         return jsonify(temperatures = list(np.ravel(min_max)))
 
-
+# Create a welcome page route
 @app.route("/")
 def welcome():
     """List all available api routes."""
